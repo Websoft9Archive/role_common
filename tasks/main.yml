@@ -66,7 +66,7 @@
     - apps
 
 - name: Create /data/wwwroot softlink to /data/apps
-    shell: ln -sf /data/apps /data/wwwroot
+  shell: ln -sf /data/apps /data/wwwroot
       
 - block:
   - name: set a regular hostname, remove "."
