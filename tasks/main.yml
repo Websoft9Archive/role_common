@@ -99,11 +99,11 @@
       name: [docker-ce,docker-ce-cli,containerd.io,docker-compose-plugin]
       update_cache: yes
       state: latest
-	  
+
   - name: Alias docker compose and permanently effective
     shell: |
-	  alias docker-compose='docker compose'
-	  echo "alias docker-compose='docker compose'" >> /etc/bashrc
+      alias docker-compose='docker compose'
+      echo "alias docker-compose='docker compose'" >> /etc/bashrc
   when: ansible_distribution == 'Amazon'
   
 - name: Started and enable Docker
