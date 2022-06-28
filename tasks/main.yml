@@ -83,12 +83,27 @@
     echo "alias docker-compose='docker compose'" >> /etc/bashrc
   when: ansible_distribution != 'Amazon' 
 
-- name: Install Docker Compose on Amazon
-  shell: |
-    amazon-linux-extras install docker -y
-    curl -L "https://github.com/docker/compose/releases/download/{{common_compose_version}}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    chmod +x /usr/local/bin/docker-compose
-    ln -sf /usr/local/bin/docker-compose  /usr/bin
+- block:
+  - name: Install required packages
+    yum:
+    name: [device-mapper-persistent-data,lvm2]
+
+  - name: Add Docker repository
+    shell: wget -O /etc/yum.repos.d/docker-ce.repo {{docker_repository_url}}
+    
+  - name: Update release server
+    shell: sudo sed -i "s/\$releasever/7/g" /etc/yum.repos.d/docker-ce.repo
+
+  - name: Install Docker on {{ansible_distribution}}
+    yum:
+    name: [docker-ce,docker-ce-cli,containerd.io,docker-compose-plugin]
+    update_cache: yes
+    state: latest
+    
+  - name: Alias docker compose and permanently effective
+    shell: |
+      alias docker-compose='docker compose'
+      echo "alias docker-compose='docker compose'" >> /etc/bashrc
   when: ansible_distribution == 'Amazon'
   
 - name: Started and enable Docker
