@@ -79,6 +79,7 @@
 - name: Install Docker Compose
   shell: |
     curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
+    systemctl start docker
     alias docker-compose='docker compose'      
   when: ansible_distribution != 'Amazon' 
 
