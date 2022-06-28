@@ -104,6 +104,8 @@
     shell: |
       alias docker-compose='docker compose'
       echo "alias docker-compose='docker compose'" >> /etc/bashrc
+      echo "alias docker-compose='docker compose'" >> docker-compose.sh
+      source docker-compose.sh
   when: ansible_distribution == 'Amazon'
   
 - name: Started and enable Docker
