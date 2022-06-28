@@ -76,11 +76,11 @@
       name: "{{common_get_hostname.stdout}}"
 
 # install docker
-- name: Install Docker Compose
+- name: Install Docker Compose and permanently effective
   shell: |
     curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
-    systemctl start docker
-    alias docker-compose='docker compose'      
+    alias docker-compose='docker compose'
+    echo "alias docker-compose='docker compose'" >> /etc/bashrc
   when: ansible_distribution != 'Amazon' 
 
 - name: Install Docker Compose on Amazon
