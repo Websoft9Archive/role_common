@@ -81,6 +81,8 @@
     curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
     alias docker-compose='docker compose'
     echo "alias docker-compose='docker compose'" >> /etc/bashrc
+    echo "alias docker-compose='docker compose'" >> /etc/profile.d/docker-compose.sh
+    source /etc/profile.d/docker-compose.sh
   when: ansible_distribution != 'Amazon' 
 
 - block:	  
