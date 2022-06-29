@@ -75,38 +75,31 @@
   - hostname:
       name: "{{common_get_hostname.stdout}}"
 
-# install docker
-- name: Install Docker Compose and permanently effective
+# Install docker
+
+- name: Install Docker on {{ansible_distribution}}
   shell: |
     curl -fsSL https://get.docker.com -o get-docker.sh && sh get-docker.sh
-    alias docker-compose='docker compose'
-    echo "alias docker-compose='docker compose'" >> /etc/profile.d/docker-compose.sh
-    source /etc/profile.d/docker-compose.sh
   when: ansible_distribution != 'Amazon' 
 
 - block:	  
-  - name: Install required packages
-    yum:
-      name: [device-mapper-persistent-data,lvm2]
+  - name: Add Docker repository and replace $releasever
+    shell: |
+      wget -O /etc/yum.repos.d/docker-ce.repo "https://download.docker.com/linux/centos/docker-ce.repo"
+      sudo sed -i "s/\$releasever/7/g" /etc/yum.repos.d/docker-ce.repo
 
-  - name: Add Docker repository
-    shell: wget -O /etc/yum.repos.d/docker-ce.repo "https://download.docker.com/linux/centos/docker-ce.repo"
-  
-  - name: Update release server
-    shell: sudo sed -i "s/\$releasever/7/g" /etc/yum.repos.d/docker-ce.repo
-
-  - name: Install Docker on {{ansible_distribution}}
+  - name: Install all required packages of Docker on {{ansible_distribution}}
     yum:
-      name: [docker-ce,docker-ce-cli,containerd.io,docker-compose-plugin,docker-scan-plugin,docker-ce-rootless-extras]
+      name: [device-mapper-persistent-data,lvm2,docker-ce,docker-ce-cli,containerd.io,docker-compose-plugin,docker-scan-plugin,docker-ce-rootless-extras]
       update_cache: yes
       state: latest
-
-  - name: Alias docker compose and permanently effective
-    shell: |
-      alias docker-compose='docker compose'
-      echo "alias docker-compose='docker compose'" >> /etc/profile.d/docker-compose.sh
-      source /etc/profile.d/docker-compose.sh
   when: ansible_distribution == 'Amazon'
+  
+- name: Add permanently alias for docker compose
+  shell: |
+    alias docker-compose='docker compose'
+    echo "alias docker-compose='docker compose'" >> /etc/profile.d/docker-compose.sh
+    source /etc/profile.d/docker-compose.sh
   
 - name: Started and enable Docker
   service:
