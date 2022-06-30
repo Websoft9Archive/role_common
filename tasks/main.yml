@@ -100,7 +100,10 @@
     alias docker-compose='docker compose'
     echo "alias docker-compose='docker compose'" >> /etc/profile.d/docker-compose.sh
     source /etc/profile.d/docker-compose.sh
-  
+
+- name: test
+  shell: docker-compose -h >> /tmp/composetest
+    
 - name: Started and enable Docker
   service:
     name: docker 
