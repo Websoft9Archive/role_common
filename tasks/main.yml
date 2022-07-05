@@ -64,6 +64,7 @@
     - config
     - cert
     - apps
+  failed_when: False
 
 - name: Create /data/wwwroot softlink to /data/apps
   shell: ln -sf /data/apps /data/wwwroot
