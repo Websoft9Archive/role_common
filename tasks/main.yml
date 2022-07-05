@@ -107,8 +107,13 @@
     enabled: yes
     state: restarted
 
-- name: Create docker network websoft9
-  shell: docker network create websoft9
+- block: 
+  - name: set a regular hostname, remove "."
+    shell: docker network ls |grep websoft9
+    register: checknetwork
+  - name: Create docker network websoft9
+    shell: docker network create websoft9
+    when: checknetwork.stdout == ""
 
 - name: Check Docker Version
   shell: sudo sh -c "docker -v 1>> /data/logs/install_version.txt"
