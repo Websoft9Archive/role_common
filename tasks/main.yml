@@ -108,7 +108,7 @@
     state: restarted
 
 - block: 
-  - name: set a regular hostname, remove "."
+  - name: Check docker network websoft9
     shell: docker network ls |grep websoft9
     register: checknetwork
   - name: Create docker network websoft9
