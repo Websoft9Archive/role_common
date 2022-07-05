@@ -106,6 +106,9 @@
     name: docker 
     enabled: yes
     state: restarted
-  
+
+- name: Create docker network websoft9
+  shell: docker network create websoft9
+
 - name: Check Docker Version
   shell: sudo sh -c "docker -v 1>> /data/logs/install_version.txt"
