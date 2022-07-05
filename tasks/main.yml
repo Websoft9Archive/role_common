@@ -53,9 +53,6 @@
   when: common_install_tools is defined and common_install_tools is not none and common_install_tools != "" and common_install_tools[0]!= ""
  
 #4 Configure
-- name: Delete common folder for multiply execute
-  shell: rm -rf /data/logs /data/apps /data/config data/cert 
-
 - name: Create common folder
   file:
     path: '/data/{{item}}'
